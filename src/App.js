@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import './App.css';
 import { MdDelete } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
@@ -22,8 +22,24 @@ function App() {
     let updateTodoArr = [...allTodos];
     updateTodoArr.push(newTodoItem);
     setTodos(updateTodoArr);
+    localStorage.setItem('todolist',JSON.stringify(updateTodoArr));
   }
 
+  // delete
+  const handleDeleteTodo = (index)=>{
+    let reduceTodo = [...allTodos];
+    reduceTodo.splice(index);
+
+    localStorage.setItem('todolist',JSON.stringify(reduceTodo));
+    setTodos(reduceTodo);
+  }
+
+  useEffect(()=>{
+    let saveTodo = JSON.parse(localStorage.getItem('todolist'));
+    if(saveTodo){
+      setTodos(saveTodo);
+    }
+  },[])
   return (
     <div className="App">
       <h1>My ToDo</h1>
@@ -54,8 +70,8 @@ function App() {
             <h3>{item.title}</h3>
             <p>{item.description}</p>
             <div>
-            <MdDelete  className='icon'/>
-            <FaCheckCircle  className='check-icon'/>
+            <MdDelete  className='icon' onClick={()=>handleDeleteTodo(index)} title='Delete?'/>
+            <FaCheckCircle  className='check-icon' title='Completed?'/>
           </div>
           </div>
               )
