@@ -33,7 +33,26 @@ function App() {
     localStorage.setItem('todolist',JSON.stringify(reduceTodo));
     setTodos(reduceTodo);
   }
+// complete
+const handleComplete =(index)=>{
+  let now = new Date();
+  let dd = now.getDate();
+  let mm = now.getMonth() + 1;
+  let yy = now.getFullYear();
+  let hh = now.getHours();
+  let mn = now.getMinutes();
+  let ss = now.getSeconds();
+  let completedOn = dd + '-' +mm + '-' +yy + '-' +hh + ':' + mn+':'+ss;
 
+  let filteredItem={
+    ...allTodos[index],
+    completedOn:completedOn
+  }
+  let updatedCompletedArr = [...completedTodos];
+  updatedCompletedArr.push(filteredItem);
+  setCompletedTodos(updatedCompletedArr);
+  handleDeleteTodo(index);
+}
   useEffect(()=>{
     let saveTodo = JSON.parse(localStorage.getItem('todolist'));
     if(saveTodo){
@@ -64,14 +83,28 @@ function App() {
         </div>
         <div className='todo-list'>
           {
-            allTodos.map((item, index)=>{
+           isCompleteScreen===false && allTodos.map((item, index)=>{
               return(
                 <div className='todo-list-item' key={index}>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
             <div>
             <MdDelete  className='icon' onClick={()=>handleDeleteTodo(index)} title='Delete?'/>
-            <FaCheckCircle  className='check-icon' title='Completed?'/>
+            <FaCheckCircle  className='check-icon' onClick={()=>handleComplete(index)} title='Completed?'/>
+          </div>
+          </div>
+              )
+            })
+          }
+          {
+           isCompleteScreen===true && completedTodos.map((item, index)=>{
+              return(
+                <div className='todo-list-item' key={index}>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            <p><small>Completed on: {item.completedOn}</small></p>
+            <div>
+            <MdDelete  className='icon' onClick={()=>handleDeleteTodo(index)} title='Delete?'/>
           </div>
           </div>
               )
