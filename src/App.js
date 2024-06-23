@@ -28,7 +28,7 @@ function App() {
   // delete
   const handleDeleteTodo = (index)=>{
     let reduceTodo = [...allTodos];
-    reduceTodo.splice(index);
+    reduceTodo.splice(index,1);
 
     localStorage.setItem('todolist',JSON.stringify(reduceTodo));
     setTodos(reduceTodo);
@@ -52,11 +52,29 @@ const handleComplete =(index)=>{
   updatedCompletedArr.push(filteredItem);
   setCompletedTodos(updatedCompletedArr);
   handleDeleteTodo(index);
+  localStorage.setItem('completedTodos',JSON.stringify(updatedCompletedArr));
+
 }
+
+// handleDeleteCompletedTodo
+
+const handleDeleteCompletedTodo = (index) => {
+  let reduceTodo = [...completedTodos];
+    reduceTodo.splice(index,1);
+
+    localStorage.setItem('completedTodos',JSON.stringify(reduceTodo));
+    setCompletedTodos(reduceTodo);
+}
+
   useEffect(()=>{
     let saveTodo = JSON.parse(localStorage.getItem('todolist'));
+    let saveCompletedTodo = JSON.parse(localStorage.getItem('completedTodos'));
+
     if(saveTodo){
       setTodos(saveTodo);
+    }
+    if (saveCompletedTodo){
+      setCompletedTodos(saveCompletedTodo);
     }
   },[])
   return (
@@ -104,7 +122,7 @@ const handleComplete =(index)=>{
             <p>{item.description}</p>
             <p><small>Completed on: {item.completedOn}</small></p>
             <div>
-            <MdDelete  className='icon' onClick={()=>handleDeleteTodo(index)} title='Delete?'/>
+            <MdDelete  className='icon' onClick={()=>handleDeleteCompletedTodo(index)} title='Delete?'/>
           </div>
           </div>
               )
