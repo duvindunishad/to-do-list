@@ -84,14 +84,21 @@ const handleDeleteCompletedTodo = (index) => {
     setCurrentEditedItem(item);
   }
   const handleUpdateTitle = (value) =>{
-
+    setCurrentEditedItem((prev)=>{
+      return {...prev,title:value}
+    })
   }
   const handleUpdateDescription =(value) =>{
-
+    setCurrentEditedItem((prev)=>{
+      return {...prev,description:value}
+    })
   }
 
   const handleUpdateTodo = ()=>{
-    
+     let newTodo =[...allTodos];
+     newTodo[currentEdit] = currentEditedItem;
+     setTodos(newTodo);
+     setCurrentEdit("");
   }
 
   return (
